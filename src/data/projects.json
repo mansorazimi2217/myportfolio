@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "title": "Training Center Management System",
+    "description": "A full-featured web-based application designed for training centers to manage students, teachers, course enrollments, earnings, and expenses. Built using PHP for backend logic, Tailwind CSS for styling, and vanilla JavaScript for dynamic features. The system provides admin panels, student/teacher registration, course tracking, and financial reports.",
+    "tags": ["PHP", "Tailwind CSS", "HTML", "JavaScript"],
+    "image": "smart.png",
+    "github": "https://github.com/yourusername/training-center-management",
+    "demo": "smart.png"
+  },
+  {
+    "id": 2,
+    "title": "OIMS – Inventory Management Landing Page",
+    "description": "A modern, fully responsive landing page for an Online Inventory Management System (OIMS). Built with React and Tailwind CSS, it highlights the platform's features, benefits, user testimonials, and encourages businesses to sign up. Designed to improve engagement and conversions for the OIMS platform.",
+    "tags": ["React", "Tailwind CSS", "Landing Page", "Responsive Design"],
+    "image": "landing.png",
+    "github": "https://github.com/yourusername/oims-landing-page",
+    "demo": "eco.png"
+  },
+  {
+    "id": 3,
+    "title": "OIMS – Inventory Management Dashboard",
+    "description": "A powerful admin dashboard for managing the entire OIMS system, featuring real-time earnings and profit tracking, customer and product management, due payments, and detailed sales analytics. Built with React and Tailwind CSS on the frontend, and Node.js with Express for the backend API.",
+    "tags": ["React", "Tailwind CSS", "Node.js", "Express", "Dashboard"],
+    "image": "home.png",
+    "github": "https://github.com/yourusername/oims-dashboard",
+    "demo": "home.png"
+  },
+  {
+    "id": 4,
+    "title": "Products Page for OIMS",
+    "description": "A responsive dashboard for tracking products, stock levels, and sales. Built with MERN stack.",
+    "tags": ["React", "Node.js", "Express", "MongoDB"],
+    "image": "/products.png",
+    "github": "https://github.com/yourusername/inventory-management-system",
+    "demo": "products.png"
+  },
+  {
+    "id": 5,
+    "title": "Customers Page for OIMS",
+    "description": "View/search customer list with filters , Track orders, spending, and contact details , View stats: Orders placed & total spent , Example: Ahmad Jan (2 orders, $128 spent)",
+    "tags": ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+    "image": "customers.png",
+    "github": "https://github.com/yourusername/recipe-finder",
+    "demo": "customers.png"
+  },
+  {
+    "id": 6,
+    "title": "Sell Dashboard for selling products",
+    "description": "Search & filter products by company/price , Add items to cart (ID, Qty, Price) , Customer selection (Permanent/Guest) , Real-time total calculation",
+    "tags": ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+    "image": "sell.png",
+    "github": "https://github.com/yourusername/ai-image-generator",
+    "demo": "sell.png"
+  },
+  {
+    "id": 7,
+    "title": "Sold Report Page ",
+    "description": "Track sold products by customer, item, or date , View transaction details: Price, Qty, Total , Monitor payments (Paid/Remaining balance) , Example: 'The Power of Your Mind' (2x $20 = $40)",
+    "tags": ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+    "image": "sold.png",
+    "github": "https://github.com/yourusername/ai-image-generator",
+    "demo": "sold.png"
+  },
+  {
+    "id": 8,
+    "title": "Earning Report Page ",
+    "description": "View total profit ($382) and sales (17 items) , See top-selling product (*'The Power of Your Mind' - $85*) , Filter transactions by date/customer , Export reports to Excel/PDF",
+    "tags": ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+    "image": "earning.png",
+    "github": "https://github.com/yourusername/ai-image-generator",
+    "demo": "earning.png"
+  },
+  {
+    "id": 9,
+    "title": "Expenses Report Page ",
+    "description": "Tracks business costs with payment method breakdown (Cash: $100, Bank: $200), shows total expenses ($300 across 3 transactions), allows adding/filtering expenses, and categorizes payments (Shop Rentals, Marketing, etc.) with quick-add functionality.",
+    "tags": ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+    "image": "expenses.png",
+    "github": "https://github.com/yourusername/ai-image-generator",
+    "demo": "expenses.png"
+  }
+]
