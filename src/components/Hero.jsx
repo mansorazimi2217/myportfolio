@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 const Hero = () => {
-  const roles = ["web developer", "Problem Solver", "Programmer"];
+  const roles = ["web developer", "Programmer"];
   const [displayedText, setDisplayedText] = useState("");
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
