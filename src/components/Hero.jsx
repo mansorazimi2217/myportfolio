@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 const Hero = () => {
-  const roles = ["web developer", "Programmer"];
+  const roles = ["Web Developer", "Programmer", "software Engineer"];
   const [displayedText, setDisplayedText] = useState("");
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -14,28 +14,42 @@ const Hero = () => {
   const controls = useAnimation();
   const [ref, inView] = useInView({ threshold: 0.1 });
   const blobRefs = useRef([]);
+  const [windowWidth, setWindowWidth] = useState(0);
 
-  // Typewriter effect with more dynamic typing
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+  const isTablet = windowWidth >= 768 && windowWidth < 1024;
+
+  // Enhanced typewriter effect with slower, smoother transitions
   useEffect(() => {
     const handleTyping = () => {
       const currentRole = roles[currentRoleIndex];
       const fullText = currentRole;
 
       if (isDeleting) {
-        setDisplayedText(fullText.substring(0, displayedText.length - 1));
-        setTypingSpeed(50); // Faster when deleting
+        setDisplayedText((prev) => prev.slice(0, -1));
+        setTypingSpeed(80); // Slower when deleting for better visibility
 
         if (displayedText === "") {
           setIsDeleting(false);
           setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
-          setTypingSpeed(100 + Math.random() * 100); // Randomize typing speed
+          setTypingSpeed(150 + Math.random() * 100); // Randomize typing speed
         }
       } else {
-        setDisplayedText(fullText.substring(0, displayedText.length + 1));
-        setTypingSpeed(100 + Math.random() * 100); // Variable typing speed
+        setDisplayedText((prev) => fullText.slice(0, prev.length + 1));
+        setTypingSpeed(120 + Math.random() * 80); // Slower, more variable typing speed
 
         if (displayedText === fullText) {
-          setTimeout(() => setIsDeleting(true), 1500 + Math.random() * 1000); // Random pause
+          setTimeout(() => setIsDeleting(true), 1500); // Longer pause before deleting
         }
       }
     };
@@ -54,9 +68,11 @@ const Hero = () => {
 
   const animateBlobs = () => {
     blobRefs.current.forEach((blob, index) => {
-      const duration = 20 + Math.random() * 10;
-      const xRange = 20 + Math.random() * 30;
-      const yRange = 20 + Math.random() * 30;
+      if (!blob) return;
+
+      const duration = isMobile ? 40 : isTablet ? 35 : 30;
+      const xRange = isMobile ? 15 : isTablet ? 20 : 25;
+      const yRange = isMobile ? 15 : isTablet ? 20 : 25;
 
       blob.animate(
         [
@@ -89,7 +105,10 @@ const Hero = () => {
   };
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: {
+      y: isMobile ? 15 : isTablet ? 20 : 30,
+      opacity: 0,
+    },
     visible: {
       y: 0,
       opacity: 1,
@@ -101,11 +120,87 @@ const Hero = () => {
     },
   };
 
+  const titleVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
+  const buttonVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+    hover: {
+      scale: 1.05,
+      transition: { type: "spring", stiffness: 400, damping: 10 },
+    },
+    tap: { scale: 0.98 },
+  };
+
+  const imageVariants = {
+    hidden: { scale: 0.9, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+        delay: 0.2,
+      },
+    },
+    float: {
+      y: [0, -15, 0],
+      transition: {
+        duration: 6,
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  const profileImageVariants = {
+    hidden: { scale: 0.95, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+        delay: 0.4,
+      },
+    },
+    float: {
+      y: [0, -10, 0],
+      rotate: [0, -2, 2, 0],
+      transition: {
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+    hover: {
+      y: -15,
+      rotate: [0, -3, 3, 0],
+      transition: {
+        y: { type: "spring", stiffness: 300, damping: 10 },
+        rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+      },
+    },
+  };
+
   return (
     <section
       id="home"
       ref={ref}
-      className="pb-20 md:pb-0 pt-30 md:pt-0 min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-900 text-gray-200"
+      className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 pb-16 sm:pb-20 md:pb-0 pt-20 sm:pt-24 md:pt-30 min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-900 text-gray-200"
     >
       {/* Animated background elements */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -115,19 +210,29 @@ const Hero = () => {
         </div>
 
         {/* Floating particles */}
-        {[...Array(20)].map((_, i) => (
+        {[...Array(isMobile ? 8 : isTablet ? 12 : 16)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full bg-primary-500/10"
             style={{
-              width: `${Math.random() * 5 + 2}px`,
-              height: `${Math.random() * 5 + 2}px`,
+              width: `${
+                Math.random() * (isMobile ? 3 : isTablet ? 4 : 5) + 2
+              }px`,
+              height: `${
+                Math.random() * (isMobile ? 3 : isTablet ? 4 : 5) + 2
+              }px`,
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
             }}
             animate={{
-              y: [0, (Math.random() - 0.5) * 100],
-              x: [0, (Math.random() - 0.5) * 100],
+              y: [
+                0,
+                (Math.random() - 0.5) * (isMobile ? 30 : isTablet ? 45 : 60),
+              ],
+              x: [
+                0,
+                (Math.random() - 0.5) * (isMobile ? 30 : isTablet ? 45 : 60),
+              ],
               opacity: [0.1, 0.3, 0.1],
             }}
             transition={{
@@ -140,38 +245,42 @@ const Hero = () => {
       </div>
 
       <motion.div
-        className="container mx-auto px-6 xl:px-30 z-10"
+        className="container mx-auto px-0 sm:px-4 z-10"
         variants={containerVariants}
         initial="hidden"
         animate={controls}
       >
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-          <div className="lg:w-1/2">
-            <motion.h1
-              className="text-3xl md:text-5xl font-bold mb-6 text-primary-400"
-              variants={itemVariants}
-            >
-              Hi, I'm a ,
-              <span className="text-primary-500 relative">
-                {displayedText}
-                <motion.span
-                  className="absolute bottom-0 left-0 w-full h-1 bg-primary-500"
-                  animate={{
-                    opacity: [0, 1, 0],
-                    width: ["0%", "100%", "0%"],
-                    left: ["0%", "0%", "100%"],
-                  }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 1.5,
-                    ease: "easeInOut",
-                  }}
-                />
-              </span>
-            </motion.h1>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 md:gap-10 lg:gap-12">
+          <div
+            className={`${
+              isTablet ? "w-5/6" : "lg:w-1/2"
+            } order-2 lg:order-1 mt-8 sm:mt-10 lg:mt-0 w-full mx-auto`}
+          >
+            <motion.div variants={titleVariants}>
+              <h1 className="text-3xl sm:text-4xl md:text-[2.8rem] lg:text-5xl font-bold mb-4 md:mb-6 text-white">
+                Hi, I'm a{" "}
+                <span className="text-primary-400 relative inline-block min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem]">
+                  {displayedText}
+                  <motion.span
+                    className="absolute bottom-0 left-0 w-full h-0.5 bg-primary-500"
+                    initial={{ scaleX: 0 }}
+                    animate={{
+                      scaleX: [0, 1, 0],
+                      originX: [0, 0, 1],
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 2,
+                      ease: "easeInOut",
+                      times: [0, 0.5, 1],
+                    }}
+                  />
+                </span>
+              </h1>
+            </motion.div>
 
             <motion.p
-              className="text-lg md:text-xl mb-8 max-w-lg text-gray-400 leading-relaxed"
+              className="text-base sm:text-lg md:text-xl mb-6 md:mb-8 max-w-lg text-gray-400 leading-relaxed"
               variants={itemVariants}
             >
               I craft{" "}
@@ -184,65 +293,98 @@ const Hero = () => {
             </motion.p>
 
             <motion.div
-              className="flex flex-wrap gap-4 mb-8"
+              className={`flex ${
+                isMobile ? "flex-col" : "flex-row"
+              } gap-3 sm:gap-4 mb-8 w-full`}
               variants={itemVariants}
             >
               <motion.a
                 href="#contact"
-                className="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium rounded-lg transition-all shadow-lg hover:shadow-primary-600/50 flex items-center gap-2"
-                whileHover={{ y: -3, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="w-full px-4 sm:px-5 md:px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium rounded-lg transition-all shadow-lg hover:shadow-primary-600/50 flex items-center justify-center gap-2 text-sm sm:text-base"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
               >
-                <FiMail /> Contact Me
+                <FiMail size={18} /> Contact Me
               </motion.a>
               <motion.a
                 href={pdf}
                 download
-                className="px-6 py-3 border-2 border-primary-600 text-primary-300 hover:text-white font-medium rounded-lg transition-all hover:bg-primary-900/50 flex items-center gap-2"
-                whileHover={{ y: -3, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="w-full px-4 sm:px-5 md:px-6 py-3 border-2 border-primary-600 text-primary-300 hover:text-white font-medium rounded-lg transition-all hover:bg-primary-900/50 flex items-center justify-center gap-2 text-sm sm:text-base"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
               >
-                <FiDownload /> Download CV
+                <FiDownload size={18} /> Download CV
               </motion.a>
               <motion.a
                 href="#projects"
-                className="px-6 py-3 border-2 border-secondary-600 text-secondary-300 hover:text-white font-medium rounded-lg transition-all hover:bg-secondary-900/50 flex items-center gap-2"
-                whileHover={{ y: -3, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="w-full px-4 sm:px-5 md:px-6 py-3 border-2 border-secondary-600 text-secondary-300 hover:text-white font-medium rounded-lg transition-all hover:bg-secondary-900/50 flex items-center justify-center gap-2 text-sm sm:text-base"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
               >
-                <FiCode /> View Work
+                <FiCode size={18} /> View Work
               </motion.a>
             </motion.div>
           </div>
 
-          <div className="lg:w-1/2 relative">
+          <div
+            className={`${
+              isTablet ? "w-2/3" : "lg:w-1/2"
+            } order-1 lg:order-2 relative w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto`}
+          >
             <motion.div
-              className="relative w-full max-w-md mx-auto"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              className="relative w-full"
+              initial="hidden"
+              animate="visible"
+              variants={imageVariants}
             >
               {/* Animated blobs */}
               <div
                 ref={(el) => (blobRefs.current[0] = el)}
-                className="absolute -top-6 -left-6 w-32 h-32 bg-primary-600 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+                className={`absolute ${
+                  isMobile
+                    ? "-top-4 -left-4 w-20 h-20"
+                    : isTablet
+                    ? "-top-5 -left-5 w-28 h-28"
+                    : "-top-6 -left-6 w-32 h-32"
+                } bg-primary-600 rounded-full mix-blend-multiply filter blur-xl opacity-70`}
               ></div>
               <div
                 ref={(el) => (blobRefs.current[1] = el)}
-                className="absolute -bottom-8 -right-8 w-32 h-32 bg-secondary-600 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+                className={`absolute ${
+                  isMobile
+                    ? "-bottom-4 -right-4 w-20 h-20"
+                    : isTablet
+                    ? "-bottom-6 -right-6 w-28 h-28"
+                    : "-bottom-8 -right-8 w-32 h-32"
+                } bg-secondary-600 rounded-full mix-blend-multiply filter blur-xl opacity-70`}
               ></div>
               <div
                 ref={(el) => (blobRefs.current[2] = el)}
-                className="absolute -top-12 -right-4 w-32 h-32 bg-tertiary-600 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+                className={`absolute ${
+                  isMobile
+                    ? "-top-6 -right-2 w-20 h-20"
+                    : isTablet
+                    ? "-top-8 -right-3 w-28 h-28"
+                    : "-top-12 -right-4 w-32 h-32"
+                } bg-tertiary-600 rounded-full mix-blend-multiply filter blur-xl opacity-70`}
               ></div>
 
-              {/* Interactive profile card */}
+              {/* Profile card with enhanced animation */}
               <motion.div
                 className="relative bg-gray-800 rounded-2xl overflow-hidden shadow-2xl border border-gray-700 group"
-                whileHover={{ y: -10 }}
+                whileHover={isMobile ? {} : "hover"}
                 transition={{ type: "spring", stiffness: 300 }}
+                variants={imageVariants}
+                animate="visible"
               >
-                <div className="h-64 bg-gradient-to-br from-primary-700 via-gray-900 to-secondary-700 flex items-center justify-center relative overflow-hidden">
+                <div
+                  className={`${
+                    isMobile ? "h-48" : isTablet ? "h-56" : "h-64"
+                  } bg-gradient-to-br from-primary-700 via-gray-900 to-secondary-700 flex items-center justify-center relative overflow-hidden`}
+                >
                   <motion.div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
@@ -254,37 +396,40 @@ const Hero = () => {
                   <motion.img
                     src={img}
                     alt="Profile"
-                    className="w-64 h-64 rounded-full border-4 border-white object-cover shadow-xl"
-                    initial={{ scale: 1 }}
-                    animate={{
-                      scale: [1, 1.03, 1],
-                      rotate: [0, 2, -2, 0],
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    whileHover={{ scale: 1.05 }}
+                    className={`${
+                      isMobile
+                        ? "w-36 h-36"
+                        : isTablet
+                        ? "w-44 h-44"
+                        : "w-56 h-56"
+                    } rounded-full border-4 border-white/90 object-cover shadow-xl`}
+                    initial="hidden"
+                    animate={["visible", "float"]}
+                    variants={profileImageVariants}
+                    whileHover={isMobile ? {} : { scale: 1.03 }}
                   />
                 </div>
 
-                <div className="p-6 text-center">
-                  <h3 className="text-2xl font-bold text-white mb-2">
+                <div className="p-4 sm:p-5 md:p-6 text-center">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 md:mb-2">
                     Mohammad Mansoor Azimi
                   </h3>
-                  <p className="text-gray-400 mb-4">Full Stack Developer</p>
+                  <p className="text-xs sm:text-sm md:text-base text-gray-400 mb-2 sm:mb-3 md:mb-4">
+                    Full Stack Developer
+                  </p>
 
-                  <div className="flex justify-center gap-4">
+                  <div className="flex justify-center gap-2 sm:gap-3 md:gap-4">
                     <motion.div
-                      className="px-4 py-1 bg-gray-700/50 rounded-full text-sm"
-                      whileHover={{ scale: 1.05 }}
+                      className="px-2 sm:px-3 py-1 bg-gray-700/50 rounded-full text-xs sm:text-sm"
+                      whileHover={{ scale: isMobile ? 1 : 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       <span className="text-primary-400">3+</span> Years Exp
                     </motion.div>
                     <motion.div
-                      className="px-4 py-1 bg-gray-700/50 rounded-full text-sm"
-                      whileHover={{ scale: 1.05 }}
+                      className="px-2 sm:px-3 py-1 bg-gray-700/50 rounded-full text-xs sm:text-sm"
+                      whileHover={{ scale: isMobile ? 1 : 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       <span className="text-secondary-400">10+</span> Projects
                     </motion.div>
