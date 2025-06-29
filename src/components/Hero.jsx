@@ -10,7 +10,7 @@ const Hero = () => {
   const [displayedText, setDisplayedText] = useState("");
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(150);
+  const [typingSpeed, setTypingSpeed] = useState(220);
   const controls = useAnimation();
   const [ref, inView] = useInView({ threshold: 0.1 });
   const blobRefs = useRef([]);
@@ -258,7 +258,7 @@ const Hero = () => {
           >
             <motion.div variants={titleVariants}>
               <h1 className="text-3xl sm:text-4xl md:text-[2.8rem] lg:text-5xl font-bold mb-4 md:mb-6 text-white">
-                Hi, I'm a{" "}
+                Hello, I'm a{" "}
                 <span className="text-primary-400 relative inline-block min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem]">
                   {displayedText}
                   <motion.span
@@ -305,7 +305,7 @@ const Hero = () => {
                 whileHover="hover"
                 whileTap="tap"
               >
-                <FiMail size={18} /> Contact Me
+                <FiMail size={18} /> Contact
               </motion.a>
               <motion.a
                 href={pdf}
